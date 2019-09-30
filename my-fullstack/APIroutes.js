@@ -3,7 +3,7 @@ const express = require("express");
 const mysql = require("mysql");
 // const morgan = require("morgan");
 const app = express();
-const PORT = 5000;
+const PORT = 3022;
 
 ////////////////////////////////////
 //   instantiate middleware    ////
@@ -19,9 +19,9 @@ var connection = mysql.createConnection({
   host: "localhost",
   // db port
   port: 3306,
-  user: "root",
-  password: "password",
-  database: "HTMLphones"
+  user: process.env.USERNAME,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE_NAME
 });
 
 ////////////////////////////////////
@@ -35,7 +35,7 @@ app.get("/", function(req, res) {
 
 // fetch all products
 app.get("/allPhones", (req, res) => {
-  connection.query("SELECT * FROM Phones", function(err, data) {
+  connection.query("SELECT * FROM Products", function(err, data) {
     if (err) {
       console.log(err);
       res.status(500).json({ message: "failed to get all phones" });

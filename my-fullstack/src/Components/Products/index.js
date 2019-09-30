@@ -1,8 +1,9 @@
 import React from "react";
 import Productheader from "./productheader";
-import Productlist from "./Productlist";
+import fetch from "isomorphic-fetch";
+import ProductShell from "./Product";
 
-const productsEndpoint = "localhost:5000/allPhones";
+const productsEndpoint = "http://localhost:3022/allPhones";
 const initialState = {
   products: [],
   error: false
@@ -25,10 +26,17 @@ export class Product extends React.Component {
     }
   }
   render() {
+    const products = this.state.products.map(product => (
+      <ProductShell
+        image={product.image}
+        name={product.Names}
+        price={product.price}
+      />
+    ));
     return (
       <React.Fragment>
         <Productheader />
-        <Productlist />
+        {products}
       </React.Fragment>
     );
   }
