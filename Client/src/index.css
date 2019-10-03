@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* Form */
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type="email"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type="subject"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Style the container/contact section */
+
+.container4 {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 10px 40px;
+  width: 100%;
+}
+
+/* Create two columns that float next to eachother */
+
+.column {
+  float: left;
+  margin-top: 6px;
+  padding: 20px;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+
+@media screen and (max-width: 600px) {
+  .column,
+  input[type="submit"] {
+    width: 40vh;
+    margin-top: 0;
+  }
+}
+
+input {
+  bottom: 0;
+  left: 0;
+  color: black;
+}
+
+.formmain {
+  text-align: center;
+}
+
+#map {
+  border: 0;
+}
