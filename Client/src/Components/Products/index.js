@@ -3,7 +3,7 @@ import Productheader from "./productheader";
 import fetch from "isomorphic-fetch";
 import ProductShell from "./Product";
 
-const productsEndpoint = "/allPhones";
+const productsEndpoint = "/products";
 const initialState = {
   products: [],
   //all our filters
@@ -63,7 +63,7 @@ class Product extends React.Component {
       products = this.state.filteredArray.map((product, i) => (
         <ProductShell
           key={i}
-          image={product.URL}
+          image={product.URl}
           name={product.Names}
           price={product.Price}
         />
@@ -72,7 +72,7 @@ class Product extends React.Component {
       products = this.state.products.map((product, i) => (
         <ProductShell
           key={i}
-          image={product.URL}
+          image={product.URl}
           name={product.Names}
           price={product.Price}
         />

@@ -1,111 +1,62 @@
 require("dotenv").config();
 const express = require("express");
-const mysql = require("mysql");
-// const morgan = require("morgan");
-const app = express();
-const PORT = process.env.PORT;
+const mongoose = require("mongoose");
 const path = require("path");
-////////////////////////////////////
-//   instantiate middleware    ////
-//////////////////////////////////
+const app = express();
+const port = process.env.PORT || 5000;
+let uri = process.env.ATLAS_URI;
 
+// register middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(morgan);
-////////////////////////////////////
-//  create database connection ////
-//////////////////////////////////
-var connection = mysql.createConnection({
-  host: "localhost",
-  // db port
-  port: 3306,
-  user: process.env.USERNAME,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE_NAME
+
+// app.use('/api', ApiRouter);
+// Serve up static assets (heroku)
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  uri = process.env.ATLAS_URI; // connection string for Atlas here
+} else {
+  // uri = "mongodb://localhost/userdb"
+  uri = process.env.ATLAS_URI; // connection string for localhost mongo here
+}
+// connection to database
+mongoose.connect(
+  uri,
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  },
+  err => {
+    if (err) return console.log(err || "connected to mongoDB");
+  }
+);
+// Creating live connection to reactjs app
+
+// routes require
+const Products = require("./routes/Products");
+const Contacts = require("./routes/Contacts");
+const usersRoutes = require("./routes");
+
+app.use("/products", Products);
+app.use("/contacts", Contacts);
+
+app.get("/api", (req, res) => {
+  res.json({ message: "API root" });
 });
 
-////////////////////////////////////
-////       api catalogue       ////
-//////////////////////////////////
+app.use("/api/users", usersRoutes);
 
-// index page
-
-// fetch all products
-app.get("/allPhones", (req, res) => {
-  connection.query("SELECT * FROM Products", function(err, data) {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ message: "failed to get all phones" });
-    }
-    res.json(data);
+// Define any API routes before this runs
+if (process.env.NODE_ENV === "production") {
+  app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname, "./client/build/index.html"));
   });
-});
-
-// fetch specfic product based on item id
-app.get("/product/:productid", (req, res) => {
-  let item = req.params.productid;
-  connection.query("SELECT * FROM Products WHERE ID = ?", [item], function(
-    err,
-    data
-  ) {
-    if (err) {
-      res.status(500).json({ message: "error grabbing product" });
-    }
-
-    res.json(data);
+} else {
+  app.get("*", function(req, res) {
+    res.send("currently serving fallback url, please check your path");
   });
-});
-
-app.get("/contacts", (req, res) => {
-  connection.query("SELECT * FROM Contacts", function(err, data) {
-    if (err) {
-      res.status(500).json({ message: "error grabbing product" });
-    }
-
-    res.json(data);
-  });
-});
-
-app.post("/newContact", function(req, res) {
-  console.log(req.body);
-  const address = req.body.address;
-  const city = req.body.city;
-  const zip = req.body.zip;
-  const name = req.body.name;
-  connection.query(
-    "INSERT INTO Contacts (names , Adress , City , Zip) VALUES(?, ?, ?, ?)",
-    [name, address, city, zip],
-    function(err, data) {
-      if (err) {
-        res.status(500).json({ message: "error making new contact" });
-      }
-      //created
-      res.status(202).send("");
-    }
-  );
-});
-
-app.delete("/deleteContact", function(req, res) {
-  let id = req.body.id;
-  console.log(id);
-  connection.query("DELETE FROM Contacts WHERE ID = ?", [id], function(
-    err,
-    data
-  ) {
-    if (err) {
-      res.status(500).json({ message: "error deleting new contact" });
-    }
-    res.status(204).send("");
-  });
-});
-
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "./Client/public/index.html"));
-});
-
-////////////////////////////////////
-/////       Launch Server      ////
-//////////////////////////////////
-app.listen(PORT, function() {
-  console.log(`Server listening on port ${PORT}!`);
+}
+app.listen(port, () => {
+  console.log(`Server is running on port: ${port}`);
 });

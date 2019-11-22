@@ -9,19 +9,20 @@ const ProductShell = props => {
           <p className="card-text"> {props.name}</p>
           <div className="d-flex justify-content-between  align-items-center">
             <div className="btn-group">
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-secondary"
-              >
+              <button type="button" className=" btn btn-warning">
+                Learn More!
                 {props.price}
               </button>
               <a href="contact.html">
                 {" "}
                 <button
+                  href="contact.html"
                   type="button"
-                  className="btn btn-sm btn-outline-secondary"
+                  className="btn btn-info"
                 >
-                  {props.desc}
+                  {" "}
+                  Buy now!
+                  {props.Description}
                 </button>
               </a>
             </div>
